@@ -1,107 +1,116 @@
+strMinor="================"
+strBigger="================================================"
+strFailed="================ command failed ================"
+strUpdate="================ system update now ================"
+strRemove="================ $1 removed with success ================"
 
-# executando update no sistema.
+function updateSystem() {
+  if apt-get update -y;
+    then
+      strMinor;
+      echo $(strUpdate); 
+      strMinor;
+      reboot;
+  else
+      strFailed;
+  fi
+}
 
 function limpeza() {
     apt-get autoremove;
     apt-get autoclean;
-    reboot;
 }
 
-function space() {
-      echo "================================================"; 
+function echoSuccess() {
+      echoSpace $(strBigger)
+      echo $(strRemove)
+      echoSpace $(strBigger)
 }
 
-function spaceMinor() {
-      echo "================"; 
+function echoSpace() {
+      echo "$1"; 
 }
 
 function echoFailed() {
-      space
-      echo "================ command failed ================"; 
-      space
+      echoSpace $(strMinor);
+      echoSpace $(strFailed); 
+      echoSpace $(strMinor);
 }
 
 function updateSystem() {
   if apt-get update -y;
     then
-      spaceMinor;
+      echoSpace $(strMinor);
       echo "================ system update now ================"; 
-      spaceMinor;
+      echoSpace $(strMinor);
   else
       echoFailed;
   fi
 }
 
-# instalando konsole.
 if apt-get remove konsole -y;
   then 
-    spaceMinor;
-    echo "================ konsole removed with success ================";
-    spaceMinor;
+    strMinor;
+    echoSuccess "konsole"
+    strMinor;
 else
     echoFailed;
 fi
 
-# removendo whatsapp.
 if apt-get remove whatsapp-for-linux -y;
   then 
-    spaceMinor;
-    echo "================ whatsapp removed with success ================";
-    spaceMinor;
+    strMinor;
+    echoSuccess "whatsapp";
+    strMinor;
 else
     echoFailed;
 fi
 
-# removendo brave.
 if apt-get remove curl -y;
    apt-get remove brave-browser -y;
    updateSystem;
   then
-    spaceMinor;
-    echo "================ brave removed with success ================";
-    spaceMinor;
+    strMinor;
+    echoSuccess "brave";
+    strMinor;
 else
     echoFailed;
 fi
 
-# removendo chrome.
 if apt-get remove google-chrome-stable -y;
   then 
-   spaceMinor;
-   echo "================ chrome removed with success ================";
-   spaceMinor;
+   strMinor;
+   echoSuccess "chrome";
+   strMinor;
 else
    echoFailed;
 fi
 
-# removendo vscode.
 if apt-get remove code -y;
   then
-   spaceMinor;
-   echo "================ vscode removed with success ================";
-   spaceMinor;
+   strMinor;
+   echoSuccess "vscode";
+   strMinor;
 else
    echoFailed;
 fi
 
-# removendo git.
 if apt-get remove git -y;
   then 
-   spaceMinor;
-   echo "================ git removed with success ================";
-   spaceMinor;
+   strMinor;
+   echoSuccess "git";
+   strMinor;
 else
   echoFailed;
 fi
 
-# removendo zsh
-
 if apt-get remove zsh -y;
   then 
-   spaceMinor;
-   echo "================ zsh removed with success ================";
-   spaceMinor;
+   strMinor;
+   echoSuccess "zsh";
+   strMinor;
    limpeza;
+   updateSystem;
 else
    echoFailed;
 fi

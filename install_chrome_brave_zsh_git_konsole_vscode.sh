@@ -1,18 +1,27 @@
 
-# executando update no sistema.
+strMinor="================"
+strBigger="================================================"
+strFailed="================ command failed ================"
+strUpdate="================ system update now ================"
+strRemove="================ $1 install with success ================"
 
-function space() {
-      echo "================================================"; 
+function echoSpace() {
+      echo "$1"; 
+}
+function echoSuccess() {
+      echoSpace $(strBigger)
+      echo $(strRemove)
+      echoSpace $(strBigger)
 }
 
-function spaceMinor() {
-      echo "================"; 
+function echoSpace() {
+      echo "$1"; 
 }
 
 function echoFailed() {
-      space
-      echo "================ command failed ================"; 
-      space
+      echoSpace $(strMinor);
+      echoSpace $(strFailed); 
+      echoSpace $(strMinor);
 }
 
 function updateSystem() {
@@ -26,30 +35,27 @@ function updateSystem() {
   fi
 }
 
-# instalando konsole.
 if apt-get install konsole -y;
   then 
     spaceMinor;
-    echo "================ git install of success ================";
+    echoSuccess "git";
     spaceMinor;
 else
     echoFailed;
 fi
 
-# instalando whatsapp.
 if wget https://github.com/eneshecan/whatsapp-for-linux/releases/download/v1.4.4/whatsapp-for-linux_1.4.4_amd64.deb;
    dpkg -i whatsapp-for-linux_1.4.4_amd64.deb;
    apt-get install -f -y;
    rm whatsapp-for-linux_1.4.4_amd64.deb;
   then 
     spaceMinor;
-    echo "================ whatsapp install of success ================";
+    echoSuccess "whatsapp";
     spaceMinor;
 else
     echoFailed;
 fi
 
-# instalando brave.
 if apt-get install curl -y;
    curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
    echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"| tee /etc/apt/sources.list.d/brave-browser-release.list;
@@ -57,49 +63,45 @@ if apt-get install curl -y;
    apt-get install brave-browser;
   then
     spaceMinor;
-    echo "================ brave install of success ================";
+    echoSuccess "brave";
     spaceMinor;
 else
     echoFailed;
 fi
 
-# instalando chrome.
 if wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
    dpkg -i google-chrome-stable_current_amd64.deb;
    apt-get install -f -y;
    rm google-chrome-stable_current_amd64.deb;
   then 
    spaceMinor;
-   echo "================ chrome install of success ================";
+   echoSuccess "chrome";
    spaceMinor;
 else
    echoFailed;
 fi
 
-# instalando vscode.
 if wget https://go.microsoft.com/fwlink/?LinkID=760868 -O code.deb;
    dpkg -i code.deb;
    apt-get install -f -y;
    rm code.deb;
   then
    spaceMinor;
-   echo "================ vscode install of success ================";
+   echoSuccess "vscode";
    spaceMinor;
 else
    echoFailed;
 fi
 
-# instalando git.
-if apt-get install git
+if apt-get install git -y
   then 
    spaceMinor;
-   echo "================ git install of success ================";
+   echoSuccess "git";
    spaceMinor;
 else
   echoFailed;
 fi
 
-# instalando zsh melhorar a instalação do zsh não ficou default.
 user=$(whoami)
 if apt-get install zsh -y;
    whoami;
@@ -107,8 +109,9 @@ if apt-get install zsh -y;
    sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)";
   then 
    spaceMinor;
-   echo "================ zsh install of success ================";
+   echoSuccess "zsh";
    spaceMinor;
+   updateSystem;
    reboot;
 else
    echoFailed;
